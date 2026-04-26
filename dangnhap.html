@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - URBAN MENSWEAR</title>
+    <style>
+        /* CSS GIAO DIỆN STREETWEAR TỐI GIẢN & MẠNH MẼ */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+        :root {
+            --primary: #0a0a0a; /* Đen tuyền */
+            --accent: #ff2a00; /* Đỏ rực */
+            --text-light: #f5f6fa;
+            --text-dark: #2f3640;
+            --gray: #dcdde1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background-color: var(--text-light); color: var(--primary); display: flex; flex-direction: column; min-height: 100vh; }
+        
+        h1, h2, h3, button, .oswald { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+
+        /* NAVBAR TỐI GIẢN */
+        nav { 
+            display: flex; justify-content: center; align-items: center; 
+            background: var(--primary); padding: 20px 5%; 
+            position: relative;
+        }
+        .brand-logo { font-size: 2.5rem; color: var(--text-light); font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 2px; text-decoration: none; }
+        .brand-logo span { color: var(--accent); }
+
+        .back-btn { position: absolute; left: 5%; color: var(--text-light); text-decoration: none; font-weight: 600; letter-spacing: 1px; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem;}
+        .back-btn:hover { color: var(--accent); }
+
+        /* FORM CONTAINER (PHONG CÁCH BRUTALISM) */
+        .auth-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        
+        .auth-box { 
+            background: white; 
+            width: 100%; max-width: 450px; 
+            padding: 50px 40px; 
+            border: 3px solid var(--primary); 
+            box-shadow: 10px 10px 0 var(--accent); 
+        }
+
+        .auth-box h2 { font-size: 2.8rem; color: var(--primary); margin-bottom: 5px; letter-spacing: 1px; }
+        .auth-box p { color: #7f8fa6; font-size: 0.95rem; margin-bottom: 35px; }
+
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; font-family: 'Oswald'; }
+        
+        .form-group input { 
+            width: 100%; padding: 15px; 
+            border: 2px solid var(--gray); 
+            background: transparent; color: var(--primary); 
+            outline: none; font-family: 'Space Grotesk'; font-size: 1rem; 
+            transition: 0.3s; border-radius: 0;
+        }
+        .form-group input:focus { border-color: var(--primary); }
+
+        .btn-submit { 
+            background: var(--primary); color: white; 
+            border: 2px solid var(--primary); 
+            padding: 15px; width: 100%; 
+            font-size: 1.3rem; cursor: pointer; font-family: 'Oswald'; 
+            transition: 0.3s; letter-spacing: 2px; margin-top: 10px;
+        }
+        .btn-submit:hover { background: transparent; color: var(--primary); }
+
+        .auth-links { margin-top: 25px; text-align: center; font-size: 0.95rem; font-weight: 600; color: #7f8fa6; }
+        .auth-links a { color: var(--accent); text-decoration: none; font-weight: 700; transition: 0.3s; }
+        .auth-links a:hover { text-decoration: underline; color: var(--primary); }
+
+        #msg { text-align: center; margin-top: 15px; font-weight: bold; font-family: 'Space Grotesk'; font-size: 0.95rem; }
+
+        @media (max-width: 480px) {
+            .auth-box { padding: 40px 20px; }
+            .back-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="back-btn">← QUAY LẠI STORE</a>
+        <a href="index.html" class="brand-logo">URBAN<span>MEN</span></a>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>WELCOME BACK</h2>
+            <p>Đăng nhập để xem lại các đơn hàng và mua sắm nhanh hơn.</p>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>EMAIL CỦA BRO</label>
+                    <input type="email" id="email" placeholder="Nhập địa chỉ Email..." required>
+                </div>
+                <div class="form-group">
+                    <label>MẬT KHẨU</label>
+                    <input type="password" id="password" placeholder="Nhập mật khẩu..." required>
+                </div>
+
+                <button type="submit" class="btn-submit">ĐĂNG NHẬP</button>
+                <div id="msg"></div>
+            </form>
+
+            <div class="auth-links">
+                CHƯA LÀ THÀNH VIÊN? <a href="dangky.html">GIA NHẬP CREW NGAY</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import file cấu hình Firebase chuẩn của bạn
+        import { auth } from './js/firebase-config.js';
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+        const loginForm = document.getElementById('loginForm');
+        const msgEl = document.getElementById('msg');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Tránh reload trang
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            msgEl.style.color = "var(--primary)";
+            msgEl.innerText = "ĐANG KIỂM TRA THÔNG TIN...";
+
+            try {
+                // Đăng nhập qua Firebase
+                await signInWithEmailAndPassword(auth, email, password);
+
+                msgEl.style.color = "#10ac84";
+                msgEl.innerText = "🎉 ĐĂNG NHẬP THÀNH CÔNG! ĐANG VÀO STORE...";
+                
+                // Tự động chuyển hướng về trang chủ sau 1 giây
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
+
+            } catch (error) {
+                msgEl.style.color = "var(--accent)";
+                
+                // Bắt lỗi Firebase và dịch sang thông báo thân thiện
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    msgEl.innerText = "❌ Sai Email hoặc Mật khẩu rồi bro ơi!";
+                } else if (error.code === 'auth/too-many-requests') {
+                    msgEl.innerText = "❌ Đăng nhập sai quá nhiều lần. Thử lại sau nhé!";
+                } else {
+                    msgEl.innerText = "❌ LỖI: " + error.message;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

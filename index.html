@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CỬA HÀNG - URBAN MENSWEAR</title>
+    <style>
+        /* CSS GIAO DIỆN STREETWEAR HOÀN TOÀN MỚI */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+        :root {
+            --primary: #0a0a0a; /* Đen tuyền */
+            --accent: #ff2a00; /* Đỏ rực */
+            --text-light: #f5f6fa;
+            --text-dark: #2f3640;
+            --gray: #2f3542;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background-color: #ffffff; color: var(--primary); }
+        
+        h1, h2, h3, .oswald { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+
+        /* NAVBAR THEO PHONG CÁCH TỐI GIẢN */
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: var(--primary); padding: 15px 5%; 
+            position: sticky; top: 0; z-index: 1000; 
+        }
+        .brand-logo { font-size: 2rem; color: var(--text-light); font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 2px; text-decoration: none; }
+        .brand-logo span { color: var(--accent); }
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 600; font-size: 1rem; text-transform: uppercase; transition: 0.3s; letter-spacing: 1px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        
+        .cart-btn { background: var(--text-light); color: var(--primary) !important; padding: 8px 20px; border-radius: 0; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); }
+        .cart-btn:hover { background: var(--accent); color: white !important; }
+
+        .auth-section { display: flex; align-items: center; gap: 15px; color: white; font-size: 0.9rem; }
+        .btn-auth { background: transparent; color: white; border: 1px solid white; padding: 5px 15px; cursor: pointer; text-transform: uppercase; font-weight: bold; transition: 0.3s; }
+        .btn-auth:hover { background: var(--accent); border-color: var(--accent); }
+        .btn-admin { background: var(--accent); border-color: var(--accent); }
+
+        /* THANH MARQUEE */
+        .marquee { background: var(--accent); color: white; padding: 10px 0; overflow: hidden; white-space: nowrap; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--primary); }
+        .marquee-content { display: inline-block; animation: scroll 15s linear infinite; font-family: 'Oswald'; font-size: 1.2rem; letter-spacing: 2px; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* HERO BANNER */
+        .hero { 
+            height: 60vh; 
+            background: linear-gradient(rgba(10,10,10,0.5), rgba(10,10,10,0.5)), url('https://images.unsplash.com/photo-1523398002811-999aa8eb58bd?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat; 
+            display: flex; align-items: center; justify-content: center; padding: 0 5%; text-align: center;
+        }
+        .hero-box { max-width: 800px; }
+        .hero-box h2 { font-size: 4.5rem; color: white; line-height: 1.1; margin-bottom: 15px; letter-spacing: 2px;}
+        .hero-box p { color: #f5f6fa; font-size: 1.2rem; margin-bottom: 25px; line-height: 1.5; font-weight: 500;}
+
+        /* BỘ LỌC CATEGORY DẠNG TAB ĐƯỜNG KẺ */
+        .street-filters { display: flex; justify-content: center; gap: 40px; padding: 60px 20px 20px; flex-wrap: wrap; background: #fff; }
+        .filter-btn { background: none; border: none; color: var(--gray); font-size: 1.2rem; font-family: 'Oswald'; font-weight: 600; cursor: pointer; padding-bottom: 5px; position: relative; text-transform: uppercase; }
+        .filter-btn::after { content: ''; position: absolute; width: 0; height: 3px; background: var(--accent); bottom: 0; left: 0; transition: 0.3s; }
+        .filter-btn:hover { color: var(--primary); }
+        .filter-btn.active { color: var(--primary); }
+        .filter-btn.active::after, .filter-btn:hover::after { width: 100%; }
+
+        /* CÔNG CỤ SẮP XẾP */
+        .tools-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 5% 20px; border-bottom: 1px solid #eee; margin-bottom: 40px; }
+        .section-title { font-size: 2rem; color: var(--primary); }
+        #sortPrice { padding: 10px; border: 2px solid var(--primary); font-family: 'Space Grotesk'; font-weight: bold; background: white; cursor: pointer; border-radius: 0; outline: none;}
+
+        /* LƯỚI SẢN PHẨM TRÀN VIỀN */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2px; background: #eee; border: 2px solid #eee; margin: 0 5% 80px; }
+        .product-card { background: white; display: flex; flex-direction: column; position: relative; overflow: hidden; transition: 0.3s; }
+        .product-card:hover { z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: scale(1.01); }
+        
+        .card-img-wrapper { position: relative; width: 100%; padding-top: 120%; overflow: hidden; }
+        .card-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .product-card:hover .card-img-wrapper img { transform: scale(1.05); }
+        
+        .card-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
+        .product-card:hover .card-overlay { opacity: 1; }
+        .btn-quick { background: var(--accent); color: white; border: none; padding: 12px 25px; font-family: 'Oswald'; font-size: 1.1rem; cursor: pointer; transform: translateY(20px); transition: 0.3s; }
+        .product-card:hover .btn-quick { transform: translateY(0); }
+
+        .card-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .card-cate { font-size: 0.8rem; color: #7f8fa6; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
+        .card-cate.hot { color: var(--accent); }
+        .card-title { font-size: 1.2rem; color: var(--primary); font-weight: 700; line-height: 1.3; margin-bottom: 10px; }
+        .card-price { font-size: 1.4rem; color: var(--accent); font-family: 'Oswald'; font-weight: 700; }
+
+        /* FOOTER */
+        footer { background: var(--primary); color: white; padding: 60px 5% 20px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h3 { font-size: 1.5rem; margin-bottom: 20px; color: var(--accent); }
+        .footer-col p { color: #a4b0be; line-height: 1.6; margin-bottom: 10px; }
+        .footer-bottom { text-align: center; color: #7f8fa6; padding-top: 20px; border-top: 1px solid #2f3542; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .hero-box h2 { font-size: 3rem; }
+            .tools-bar { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="brand-logo">URBAN<span>MEN</span></a>
+        
+        <div class="nav-links">
+            <a href="index.html" class="active">CỬA HÀNG</a>
+            <a href="hottrend.html">HOT TREND</a>
+            <a href="giohang.html" class="cart-btn">GIỎ HÀNG (<span id="cartCount">0</span>)</a>
+        </div>
+
+        <div class="auth-section" id="authSection">
+            <button class="btn-auth" onclick="window.location.href='dangnhap.html'">ĐĂNG NHẬP</button>
+            <button class="btn-auth" onclick="window.location.href='dangky.html'">ĐĂNG KÝ</button>
+        </div>
+    </nav>
+
+    <div class="marquee">
+        <div class="marquee-content">
+            🔥 URBAN MENSWEAR OFFICIAL STORE 🔥 FULL COLLECTION 2026 🔥 URBAN MENSWEAR OFFICIAL STORE 🔥 FULL COLLECTION 2026 🔥 
+        </div>
+    </div>
+
+    <div class="hero">
+        <div class="hero-box">
+            <h2>URBAN STORE</h2>
+            <p>Khám phá toàn bộ bộ sưu tập mang đậm chất thời trang đường phố.</p>
+        </div>
+    </div>
+
+    <div class="street-filters" id="categoryFilter">
+        <button class="filter-btn active" onclick="filterProducts('Tất cả', this)">Tất cả</button>
+        <button class="filter-btn" onclick="filterProducts('Áo Thun (T-Shirt)', this)">ÁO THUN</button>
+        <button class="filter-btn" onclick="filterProducts('Áo Khoác & Hoodie', this)">ÁO KHOÁC & HOODIE</button>
+        <button class="filter-btn" onclick="filterProducts('Quần Jean & Cargo', this)">QUẦN JEAN & CARGO</button>
+        <button class="filter-btn" onclick="filterProducts('Phụ Kiện (Mũ, Túi...)', this)">PHỤ KIỆN</button>
+    </div>
+
+    <div class="tools-bar" id="all-products-section">
+        <h2 class="section-title">ALL PRODUCTS</h2>
+        <select id="sortPrice" onchange="sortProducts()">
+            <option value="default">SẮP XẾP: MỚI NHẤT</option>
+            <option value="lowToHigh">GIÁ: THẤP ĐẾN CAO</option>
+            <option value="highToLow">GIÁ: CAO ĐẾN THẤP</option>
+        </select>
+    </div>
+
+    <div class="products-grid" id="productContainer">
+        <h3 style="width: 100%; text-align: center; color: #888; padding: 40px; grid-column: 1 / -1;">Đang tải kho hàng...</h3>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>URBAN MENSWEAR</h3>
+                <p>Thương hiệu Local Brand mang đến phong cách thời trang đường phố mạnh mẽ, phá cách và đậm chất riêng cho phái mạnh.</p>
+            </div>
+            <div class="footer-col">
+                <h3>LIÊN HỆ</h3>
+                <p>📍 CS1: Quảng Ninh, Hải Phòng</p>
+                <p>📍 CS2: Vincom Bà Triệu, Hà Nội</p>
+                <p>📞 Hotline: 0345.460.0861</p>
+            </div>
+            <div class="footer-col">
+                <h3>CHÍNH SÁCH</h3>
+                <p>Đổi trả miễn phí trong 7 ngày.</p>
+                <p>Kiểm tra hàng trước khi thanh toán.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p> 2026 URBAN MENSWEAR.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { auth, db } from './js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        let allProducts = []; 
+        const CART_KEY = 'UrbanCart';
+
+        onAuthStateChanged(auth, async (user) => {
+            const authSection = document.getElementById('authSection');
+            if (user) {
+                authSection.innerHTML = `
+                    <span>Hi, ${user.email.split('@')[0]}</span>
+                    <button class="btn-auth" id="btnLogout">LOG OUT</button>
+                `;
+                document.getElementById('btnLogout').addEventListener('click', async () => {
+                    await signOut(auth);
+                    window.location.reload();
+                });
+
+                try {
+                    const docRef = doc(db, "users", user.uid);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists() && docSnap.data().role === "admin") {
+                        const adminBtn = document.createElement('button');
+                        adminBtn.innerText = "ADMIN PANEL";
+                        adminBtn.className = "btn-auth btn-admin";
+                        adminBtn.onclick = () => window.location.href = 'admin.html';
+                        authSection.insertBefore(adminBtn, document.getElementById('btnLogout'));
+                    }
+                } catch (e) {}
+            } else {
+                authSection.innerHTML = `
+                    <button class="btn-auth" onclick="window.location.href='dangnhap.html'">ĐĂNG NHẬP</button>
+                    <button class="btn-auth" onclick="window.location.href='dangky.html'">ĐĂNG KÝ</button>
+                `;
+            }
+        });
+
+        async function loadProducts() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "products"));
+                allProducts = []; 
+                querySnapshot.forEach((doc) => {
+                    allProducts.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Mặc định sắp xếp theo mới nhất
+                allProducts.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+                
+                renderProducts('Tất cả');
+            } catch (error) {
+                document.getElementById('productContainer').innerHTML = "<p style='color:red; padding: 20px;'>Lỗi kết nối máy chủ.</p>";
+            }
+        }
+
+        function renderProducts(categoryFilter) {
+            const container = document.getElementById('productContainer');
+            container.innerHTML = ""; 
+
+            // CẬP NHẬT: Lọc chính xác theo Value
+            const filtered = allProducts.filter(p => {
+                if (categoryFilter === 'Tất cả') return true;
+                // Cần đảm bảo nếu sản phẩm cũ không có danh mục thì mặc định là Áo Thun
+                return (p.category || 'Áo Thun (T-Shirt)') === categoryFilter;
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<h3 style="width: 100%; text-align: center; color: #888; padding: 40px; grid-column: 1 / -1; font-family: 'Oswald'; font-size: 2rem;">CHƯA CÓ SẢN PHẨM Ở DANH MỤC NÀY</h3>`;
+                return;
+            }
+            filtered.forEach(p => container.appendChild(createProductCard(p)));
+        }
+
+        function createProductCard(product) {
+            const div = document.createElement('div');
+            div.className = 'product-card';
+            
+            const displayPrice = product.variants && product.variants.length > 0 ? product.variants[0].price : (product.price || 0);
+            
+            // Nếu là Hot Trend thì đổi màu chữ nhãn category cho sinh động
+            const cateClass = product.isFeatured ? 'card-cate hot' : 'card-cate';
+
+            div.innerHTML = `
+                <div class="card-img-wrapper">
+                    <img src="${product.imageUrl}" alt="${product.name}">
+                    <div class="card-overlay">
+                        <button class="btn-quick" onclick="window.location.href='thongtinsp.html?id=${product.id}'">CHỌN SIZE / MÀU</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div>
+                        <p class="${cateClass}">${product.category || 'URBAN'}</p>
+                        <h3 class="card-title">${product.name}</h3>
+                    </div>
+                    <p class="card-price">${displayPrice.toLocaleString('vi-VN')} ₫</p>
+                </div>
+            `;
+            return div;
+        }
+
+        // CẬP NHẬT LOGIC CHUYỂN ĐỔI KHI BẤM NÚT LỌC VÀ SẮP XẾP
+        window.sortProducts = function() {
+            const sortValue = document.getElementById('sortPrice').value;
+            // Tìm nút filter đang được chọn (active)
+            const activeFilterBtn = document.querySelector('.filter-btn.active');
+            
+            // Lấy trực tiếp tên danh mục từ hàm onclick của nút đó
+            let activeCategory = 'Tất cả';
+            if (activeFilterBtn) {
+                const onclickText = activeFilterBtn.getAttribute('onclick');
+                // Regex để trích xuất chữ "Áo Thun (T-Shirt)" từ chuỗi "filterProducts('Áo Thun (T-Shirt)', this)"
+                const match = onclickText.match(/'([^']+)'/);
+                if (match) {
+                    activeCategory = match[1];
+                }
+            }
+
+            if (sortValue === 'lowToHigh') {
+                allProducts.sort((a, b) => {
+                    const priceA = a.variants && a.variants.length > 0 ? a.variants[0].price : (a.price || 0);
+                    const priceB = b.variants && b.variants.length > 0 ? b.variants[0].price : (b.price || 0);
+                    return priceA - priceB;
+                });
+            } else if (sortValue === 'highToLow') {
+                allProducts.sort((a, b) => {
+                    const priceA = a.variants && a.variants.length > 0 ? a.variants[0].price : (a.price || 0);
+                    const priceB = b.variants && b.variants.length > 0 ? b.variants[0].price : (b.price || 0);
+                    return priceB - priceA;
+                });
+            } else {
+                allProducts.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+            }
+            
+            renderProducts(activeCategory);
+        }
+
+        window.filterProducts = function(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Chạy hàm render sản phẩm theo đúng danh mục được truyền vào
+            renderProducts(category);
+        }
+
+        function updateCartCount() {
+            let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            document.getElementById('cartCount').innerText = cart.reduce((t, i) => t + i.quantity, 0);
+        }
+
+        loadProducts();
+        updateCartCount();
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng - URBAN MENSWEAR</title>
+    <style>
+        /* CSS GIAO DIỆN STREETWEAR HOÀN TOÀN MỚI */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+        :root {
+            --primary: #0a0a0a; /* Đen tuyền */
+            --accent: #ff2a00; /* Đỏ rực */
+            --text-light: #f5f6fa;
+            --text-dark: #2f3640;
+            --gray: #dcdde1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background-color: #ffffff; color: var(--primary); }
+        
+        h1, h2, h3, h4, th, .oswald { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+
+        /* NAVBAR TỐI GIẢN (GIỐNG TRANG CHỦ) */
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: var(--primary); padding: 15px 5%; 
+            position: sticky; top: 0; z-index: 1000; 
+        }
+        .brand-logo { font-size: 2rem; color: var(--text-light); font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 2px; text-decoration: none; }
+        .brand-logo span { color: var(--accent); }
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 600; font-size: 1rem; text-transform: uppercase; transition: 0.3s; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--accent); }
+        
+        .auth-section { display: flex; align-items: center; gap: 15px; color: white; font-size: 0.9rem; }
+        .btn-auth { background: transparent; color: white; border: 1px solid white; padding: 5px 15px; cursor: pointer; text-transform: uppercase; font-weight: bold; transition: 0.3s; }
+        .btn-auth:hover { background: var(--accent); border-color: var(--accent); }
+
+        /* THANH MARQUEE */
+        .marquee { background: var(--accent); color: white; padding: 10px 0; overflow: hidden; white-space: nowrap; border-bottom: 2px solid var(--primary); }
+        .marquee-content { display: inline-block; animation: scroll 15s linear infinite; font-family: 'Oswald'; font-size: 1.2rem; letter-spacing: 2px; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* BỐ CỤC GIỎ HÀNG BRUTALISM */
+        .cart-wrapper { max-width: 1200px; margin: 40px auto; display: flex; gap: 30px; padding: 0 5%; flex-wrap: wrap; }
+        
+        .cart-section { flex: 2; border: 3px solid var(--primary); padding: 30px; background: white; box-shadow: 8px 8px 0 rgba(0,0,0,0.1); }
+        .cart-section h2 { font-size: 2.2rem; border-bottom: 3px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; }
+        
+        /* CỘT THANH TOÁN (ĐẢO MÀU ĐEN CHỮ TRẮNG) */
+        .checkout-section { flex: 1; border: 3px solid var(--primary); padding: 30px; background: var(--primary); color: white; height: fit-content; box-shadow: 8px 8px 0 var(--accent); }
+        .checkout-section h2 { font-size: 2rem; color: white; border-bottom: 3px solid var(--accent); padding-bottom: 15px; margin-bottom: 20px; }
+
+        /* BẢNG GIỎ HÀNG */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px 10px; border-bottom: 1px solid var(--gray); text-align: left; vertical-align: middle; }
+        th { color: var(--primary); font-size: 1.1rem; }
+        .cart-item-img { width: 80px; height: 100px; object-fit: cover; border: 2px solid var(--primary); }
+        .variant-badge { display: inline-block; background: var(--primary); color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; font-family: 'Oswald'; letter-spacing: 1px; margin-top: 8px; text-transform: uppercase; }
+        
+        .qty-btn { background: white; border: 2px solid var(--primary); width: 30px; height: 30px; cursor: pointer; font-weight: bold; transition: 0.2s; font-family: 'Space Grotesk'; }
+        .qty-btn:hover { background: var(--primary); color: white; }
+        .remove-btn { color: var(--accent); cursor: pointer; border: none; background: none; font-weight: bold; font-family: 'Oswald'; font-size: 1.1rem; transition: 0.2s; letter-spacing: 1px; text-decoration: underline; }
+        .remove-btn:hover { color: var(--primary); }
+        
+        /* FORM THANH TOÁN */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--text-light); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; font-family: 'Oswald'; }
+        .form-group input, .form-group textarea { width: 100%; padding: 15px; border: 2px solid transparent; background: rgba(255,255,255,0.1); color: white; outline: none; font-family: 'Space Grotesk'; font-size: 1rem; transition: 0.3s; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); background: rgba(255,255,255,0.15); }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.5); }
+        
+        .payment-methods { background: rgba(255,255,255,0.05); padding: 15px; border: 1px solid rgba(255,255,255,0.2); }
+        .payment-option { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; font-weight: 500; color: white;}
+        .payment-option input { width: auto; margin: 0; transform: scale(1.2); cursor: pointer; accent-color: var(--accent); }
+        
+        .total-price { font-size: 2rem; color: var(--accent); font-family: 'Oswald'; margin: 25px 0; text-align: center; border: 2px dashed var(--accent); padding: 15px; background: rgba(255, 42, 0, 0.1); }
+        .btn-checkout { background: var(--accent); color: white; border: 2px solid var(--accent); padding: 18px; width: 100%; font-size: 1.4rem; cursor: pointer; font-family: 'Oswald'; transition: 0.3s; letter-spacing: 2px; }
+        .btn-checkout:hover { background: white; color: var(--accent); }
+        .btn-checkout:disabled { background: #555; color: #888; border-color: #555; cursor: not-allowed; }
+
+        /* MODAL QUÉT MÃ QR (Được làm ngầu hơn) */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background-color: var(--primary); padding: 40px; width: 400px; text-align: center; border: 3px solid var(--accent); color: white; }
+        .modal-content img { width: 100%; max-width: 250px; margin: 20px 0; border: 4px solid white; padding: 10px; background: white;}
+        .btn-confirm-transfer { background: var(--accent); color: white; border: 2px solid var(--accent); padding: 15px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 15px; font-family: 'Oswald'; font-size: 1.2rem; transition: 0.3s; }
+        .btn-confirm-transfer:hover { background: transparent; color: var(--accent); }
+        .btn-cancel-transfer { background: transparent; color: #888; border: none; padding: 10px; width: 100%; cursor: pointer; margin-top: 10px; font-family: 'Oswald'; font-size: 1rem; text-decoration: underline; }
+        .btn-cancel-transfer:hover { color: white; }
+
+        @media (max-width: 768px) {
+            .cart-wrapper { flex-direction: column; }
+            .cart-section, .checkout-section { width: 100%; }
+            table { min-width: 500px; }
+            .table-responsive { overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="brand-logo">URBAN<span>MEN</span></a>
+        
+        <div class="nav-links">
+            <a href="index.html">← TIẾP TỤC MUA SẮM</a>
+        </div>
+
+        <div class="auth-section" id="authSection">
+            <button class="btn-auth" onclick="window.location.href='dangnhap.html'">ĐĂNG NHẬP</button>
+        </div>
+    </nav>
+
+    <div class="marquee">
+        <div class="marquee-content">
+            🔥 HOÀN TẤT ĐƠN HÀNG ĐỂ ĐƯỢC FREE SHIP 🔥 NHẬP ĐÚNG THÔNG TIN ĐỂ SHIPPER GỌI 🔥 THANH TOÁN QR ĐỂ ĐƯỢC ƯU TIÊN XỬ LÝ 🔥
+        </div>
+    </div>
+
+    <div class="cart-wrapper">
+        <div class="cart-section">
+            <h2>GIỎ HÀNG CỦA BRO</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>ITEM</th><th>ĐƠN GIÁ</th><th>SL</th><th>THÀNH TIỀN</th><th></th></tr>
+                    </thead>
+                    <tbody id="cartItems"></tbody>
+                </table>
+            </div>
+            <h3 id="emptyCartMsg" style="text-align: center; color: var(--text-dark); display: none; padding: 50px 0; font-family: 'Oswald'; font-size: 2rem;">GIỎ HÀNG TRỐNG! VỀ LÊN ĐỒ NGAY!</h3>
+        </div>
+
+        <div class="checkout-section">
+            <h2>THÔNG TIN NHẬN HÀNG</h2>
+            <div class="form-group">
+                <label>HỌ VÀ TÊN:</label>
+                <input type="text" id="cusName" placeholder="Tên người nhận..." required>
+            </div>
+            <div class="form-group">
+                <label>SỐ ĐIỆN THOẠI:</label>
+                <input type="tel" id="cusPhone" placeholder="SĐT để Shipper gọi..." required>
+            </div>
+            <div class="form-group">
+                <label>ĐỊA CHỈ NHẬN HÀNG:</label>
+                <textarea id="cusAddress" rows="3" placeholder="Số nhà, Phường/Xã, Quận/Huyện, Tỉnh/TP..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>PHƯƠNG THỨC THANH TOÁN:</label>
+                <div class="payment-methods">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentType" value="COD" checked>
+                        THANH TOÁN KHI NHẬN HÀNG (COD)
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentType" value="Chuyển khoản">
+                        CHUYỂN KHOẢN NGÂN HÀNG (QR CODE)
+                    </label>
+                </div>
+            </div>
+            
+            <div class="total-price">TỔNG: <span id="finalTotal">0</span> ₫</div>
+            
+            <button class="btn-checkout" id="btnPlaceOrder">CHỐT ĐƠN</button>
+            <p id="checkoutMsg" style="text-align: center; font-weight: bold; margin-top: 15px; font-family: 'Space Grotesk';"></p>
+        </div>
+    </div>
+
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <h3 style="font-family: 'Oswald'; font-size: 2rem; color: var(--accent);">QUÉT MÃ THANH TOÁN</h3>
+            <p style="font-size: 15px; color: #aaa; margin-top: 5px;">Mở App ngân hàng để thanh toán nhanh</p>
+            
+            <img id="qrImage" src="" alt="Mã QR Chuyển khoản">
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; text-align: left; font-size: 15px; border-left: 4px solid var(--accent); margin-bottom: 20px;">
+                <p style="margin-bottom: 8px;">SỐ TIỀN: <strong id="qrAmount" style="color: var(--accent); font-size: 18px; font-family: 'Oswald'; letter-spacing: 1px;"></strong></p>
+                <p>NỘI DUNG CK: <strong id="qrContent" style="color: white; font-family: 'Oswald'; letter-spacing: 1px;"></strong></p>
+            </div>
+
+            <button class="btn-confirm-transfer" id="btnConfirmTransfer">TÔI ĐÃ CHUYỂN KHOẢN</button>
+            <button class="btn-cancel-transfer" id="btnCancelTransfer">HỦY ĐỂ CHỌN COD</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './js/firebase-config.js';
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+        const CART_KEY = 'UrbanCart';
+        let currentUserId = "guest";
+        let grandTotal = 0; 
+
+        onAuthStateChanged(auth, (user) => { 
+            const authSection = document.getElementById('authSection');
+            if (user) {
+                currentUserId = user.uid; 
+                authSection.innerHTML = `
+                    <span>Hi, ${user.email.split('@')[0]}</span>
+                    <button class="btn-auth" id="btnLogout">LOG OUT</button>
+                `;
+                document.getElementById('btnLogout').addEventListener('click', async () => {
+                    await signOut(auth);
+                    window.location.reload();
+                });
+            }
+        });
+
+        // HIỂN THỊ GIỎ HÀNG
+        function renderCart() {
+            const cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            const tbody = document.getElementById('cartItems');
+            const emptyMsg = document.getElementById('emptyCartMsg');
+            
+            tbody.innerHTML = "";
+            grandTotal = 0;
+
+            if (cart.length === 0) {
+                emptyMsg.style.display = "block";
+                document.getElementById('btnPlaceOrder').disabled = true;
+                document.querySelector('table').style.display = "none";
+            } else {
+                emptyMsg.style.display = "none";
+                document.getElementById('btnPlaceOrder').disabled = false;
+                document.querySelector('table').style.display = "table";
+
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    grandTotal += itemTotal;
+                    
+                    let displayName = `<strong style="font-size: 1.1rem; color: var(--primary); font-family: 'Oswald';">${item.name.split('(')[0]}</strong>`;
+                    if (item.variant && item.variant !== 'Mặc định') {
+                        displayName += `<br><span class="variant-badge">${item.variant}</span>`;
+                    }
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="display: flex; align-items: center; gap: 15px; min-width: 250px;">
+                                <img src="${item.image}" class="cart-item-img"> 
+                                <div style="line-height: 1.4;">${displayName}</div>
+                            </td>
+                            <td style="font-weight: bold; color: var(--text-dark);">${item.price.toLocaleString('vi-VN')} ₫</td>
+                            <td>
+                                <div style="display:flex; align-items:center; gap: 10px;">
+                                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                                    <span style="font-weight: bold; width: 20px; text-align: center;">${item.quantity}</span>
+                                    <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                                </div>
+                            </td>
+                            <td style="color: var(--accent); font-weight: bold; font-family:'Oswald'; font-size: 1.3rem; letter-spacing: 1px;">${itemTotal.toLocaleString('vi-VN')} ₫</td>
+                            <td><button class="remove-btn" onclick="removeItem(${index})">XÓA</button></td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById('finalTotal').innerText = grandTotal.toLocaleString('vi-VN');
+        }
+
+        window.changeQty = function(index, change) {
+            let cart = JSON.parse(localStorage.getItem(CART_KEY));
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) cart.splice(index, 1);
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            renderCart();
+        }
+
+        window.removeItem = function(index) {
+            let cart = JSON.parse(localStorage.getItem(CART_KEY));
+            cart.splice(index, 1);
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            renderCart();
+        }
+
+        renderCart();
+
+        // --------------------------------------------------------
+        // XỬ LÝ THANH TOÁN & ĐẶT HÀNG
+        // --------------------------------------------------------
+        const btnPlaceOrder = document.getElementById('btnPlaceOrder');
+        const qrModal = document.getElementById('qrModal');
+        let orderDataToSave = {}; 
+
+        btnPlaceOrder.addEventListener('click', () => {
+            const name = document.getElementById('cusName').value;
+            const phone = document.getElementById('cusPhone').value;
+            const address = document.getElementById('cusAddress').value;
+            const paymentType = document.querySelector('input[name="paymentType"]:checked').value;
+
+            if (!name || !phone || !address) {
+                alert("Vui lòng điền đầy đủ thông tin để shipper còn biết đường giao hàng nhé bro!"); return;
+            }
+
+            const cart = JSON.parse(localStorage.getItem(CART_KEY));
+            
+            orderDataToSave = {
+                customerId: currentUserId,
+                customerName: name,
+                customerPhone: phone,
+                customerAddress: address,
+                items: cart, 
+                totalPrice: grandTotal,
+                paymentMethod: paymentType,
+                status: (paymentType === 'COD') ? "Chờ xử lý" : "Chờ xác nhận thanh toán", 
+                createdAt: new Date()
+            };
+
+            if (paymentType === 'COD') {
+                submitOrderToFirebase();
+            } else {
+                showQRCode(phone);
+            }
+        });
+
+        // HIỂN THỊ MÃ QR TỰ ĐỘNG
+        function showQRCode(phone) {
+            const BANK_ID = "MB"; // Mã ngân hàng (Vietcombank, MB, Techcombank...)
+            const ACCOUNT_NO = "0365467504"; // Số tài khoản
+            const ACCOUNT_NAME = "VU THI TUYET NGAN"; // Tên chủ TK
+            
+            const orderCode = "URBAN" + Math.floor(Math.random() * 10000); 
+            const transferContent = `${orderCode} ${phone}`; 
+
+            const qrUrl = `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NO}-compact.png?amount=${grandTotal}&addInfo=${transferContent}&accountName=${ACCOUNT_NAME}`;
+
+            document.getElementById('qrImage').src = qrUrl;
+            document.getElementById('qrAmount').innerText = grandTotal.toLocaleString('vi-VN') + ' ₫';
+            document.getElementById('qrContent').innerText = transferContent;
+            
+            qrModal.style.display = 'flex';
+        }
+
+        document.getElementById('btnConfirmTransfer').addEventListener('click', () => {
+            qrModal.style.display = 'none'; 
+            submitOrderToFirebase(); 
+        });
+
+        document.getElementById('btnCancelTransfer').addEventListener('click', () => {
+            qrModal.style.display = 'none';
+        });
+
+        // GỬI ĐƠN LÊN FIREBASE
+        async function submitOrderToFirebase() {
+            const msgEl = document.getElementById('checkoutMsg');
+            msgEl.style.color = "#00d2d3";
+            msgEl.innerText = "ĐANG LÊN ĐƠN CHO BRO...";
+            btnPlaceOrder.disabled = true;
+            btnPlaceOrder.innerText = "ĐANG XỬ LÝ...";
+
+            try {
+                await addDoc(collection(db, "orders"), orderDataToSave);
+                localStorage.removeItem(CART_KEY); 
+                
+                msgEl.style.color = "#10ac84";
+                msgEl.innerText = "🎉 CHỐT ĐƠN THÀNH CÔNG! HÀNG SẼ SỚM LÊN ĐƯỜNG.";
+                
+                setTimeout(() => {
+                    alert("Urban Menswear đã nhận đơn. Cảm ơn bro đã ủng hộ!");
+                    window.location.href = "index.html";
+                }, 2000);
+
+            } catch (error) {
+                msgEl.style.color = "var(--accent)";
+                msgEl.innerText = "❌ CÓ LỖI XẢY RA, VUI LÒNG THỬ LẠI.";
+                btnPlaceOrder.disabled = false;
+                btnPlaceOrder.innerText = "CHỐT ĐƠN";
+            }
+        }
+    </script> 
+</body>
+</html>
